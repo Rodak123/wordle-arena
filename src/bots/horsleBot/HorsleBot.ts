@@ -9,11 +9,11 @@ export class HorsleBot extends ASolverBot {
     };
   }
 
-  protected _init(): void {
-    console.log("Ready to horse around!")
+  protected async _init(): Promise<void> {
+    console.log('Ready to horse around!');
   }
 
-  protected _pickWord(): string {
-    return "horse";
+  protected async _pickWord(): Promise<string> {
+    return 'horse';
   }
 }
