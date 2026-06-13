@@ -16,6 +16,9 @@ export class Wordle {
   public static isSolved = (guess: Guess) =>
     guess.every((guessLetter) => guessLetter.status === LETTER_STATUS.EXACT);
 
+  public static toWord = (guess: Guess) =>
+    guess.reduce((word, guessLetter) => word + guessLetter.letter, '');
+
   private _solution: RawGuess | null = null;
   private _validWords: string[];
 

@@ -1,4 +1,5 @@
 import type { Guess } from '../nytimes/Guess.ts';
+import type { BotMeta } from './BotMeta.ts';
 
 export const BOT_STATUS = {
   SOLVED: 'solved',
@@ -9,6 +10,7 @@ export const BOT_STATUS = {
 export type BotStatus = (typeof BOT_STATUS)[keyof typeof BOT_STATUS];
 
 interface BaseBotResult {
+  meta: BotMeta;
   guesses: Guess[];
   status: BotStatus;
   solvingTimeMs: number;

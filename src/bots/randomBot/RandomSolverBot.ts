@@ -1,7 +1,9 @@
 import { ASolverBot, type BotMeta } from '../allowedContext.ts';
 
 export class RandomSolverBot extends ASolverBot {
-  public about(): BotMeta {
+  private _wordsLeft: string[] = [];
+
+  protected _about(): BotMeta {
     return {
       name: 'Random Bot',
       author: 'Radek Titěra',
@@ -11,15 +13,16 @@ export class RandomSolverBot extends ASolverBot {
   }
 
   protected _init(): void {
-    // noting to init
+    // loads the valid word list
+    this._wordsLeft = this._getValidWords();
   }
 
   protected _pickWord(): string {
-    const wordList = this._getValidWords();
+    // picks and removes a random word from it
+    const index = Math.floor(Math.random() * this._wordsLeft.length);
+    this._wordsLeft.splice(index, 1);
 
-    const index = Math.floor(Math.random() * wordList.length);
-    const word = wordList[index];
-
+    const word = this._wordsLeft[index];
     return word;
   }
 }

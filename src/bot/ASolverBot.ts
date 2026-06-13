@@ -40,20 +40,28 @@ export abstract class ASolverBot {
 
     const startTime = performance.now();
 
-    for (let i = 0; i < Wordle.AttemptCount; i++) {
-      try {
-        const word = this._pickWord(i, guesses);
-        const rawGuess = this._wordle.createRawGuess(word);
-        const guess = this._wordle.evaluateRawGuess(rawGuess);
-        guesses.push(guess);
+    try {
+      this._init();
+    } catch (err) {
+      error = err as Error;
+    }
 
-        if (Wordle.isSolved(guess)) {
-          isSolved = true;
+    if (error === null) {
+      for (let i = 0; i < Wordle.AttemptCount; i++) {
+        try {
+          const word = this._pickWord(i, guesses);
+          const rawGuess = this._wordle.createRawGuess(word);
+          const guess = this._wordle.evaluateRawGuess(rawGuess);
+          guesses.push(guess);
+
+          if (Wordle.isSolved(guess)) {
+            isSolved = true;
+            break;
+          }
+        } catch (err) {
+          error = err as Error;
           break;
         }
-      } catch (err) {
-        error = err as Error;
-        break;
       }
     }
 
@@ -63,6 +71,7 @@ export abstract class ASolverBot {
     const baseResult = {
       guesses,
       solvingTimeMs,
+      meta: this._about(),
     };
 
     if (error !== null) {
@@ -85,8 +94,19 @@ export abstract class ASolverBot {
 
   // Custom bot
 
+  /**
+   * Information about the bot
+   */
+  protected abstract _about(): BotMeta;
+
+  /**
+   * Initializes the custom bot
+   */
   protected abstract _init(): void;
-  public abstract about(): BotMeta;
+
+  /**
+   * The bot choses a word
+   */
   protected abstract _pickWord(
     attemptIndex: number,
     previousGuesses: Guess[],
