@@ -1,5 +1,7 @@
 # Wordle Bot Arena
 
+![Discord Preview](./docs/discord_preview.png)
+
 Wordle simulator which provides a simple way to implement your own Wordle bot.
 
 [Create your own solver bot](./docs/CREATE_BOT.md).
