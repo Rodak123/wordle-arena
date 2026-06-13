@@ -6,10 +6,10 @@ export const LETTER_STATUS = {
 
 export type LetterStatus = (typeof LETTER_STATUS)[keyof typeof LETTER_STATUS];
 
-export type GuessLetter = {
+export interface GuessLetter {
   letter: string;
   status: LetterStatus;
-};
+}
 
 export type RawGuess = [string, string, string, string, string];
 

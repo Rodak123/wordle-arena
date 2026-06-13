@@ -11,7 +11,17 @@ export class Wordle {
   private static getEndpoint = (date: Date) =>
     `https://www.nytimes.com/svc/wordle/v2/${format(date, 'yyyy-MM-dd')}.json`;
 
+  public static readonly AttemptCount = 6;
+
+  public static isSolved = (guess: Guess) =>
+    guess.every((guessLetter) => guessLetter.status === LETTER_STATUS.EXACT);
+
   private _solution: RawGuess | null = null;
+  private _validWords: string[];
+
+  constructor(validWords: string[]) {
+    this._validWords = validWords;
+  }
 
   public async load(date: Date): Promise<void> {
     const endpoint = Wordle.getEndpoint(date);
@@ -33,7 +43,28 @@ export class Wordle {
     }
   }
 
-  public evaluateGuess(guess: RawGuess): Guess {
+  public isWordValid(word: string): boolean {
+    return this._validWords.includes(word);
+  }
+
+  public get validWords(): string[] {
+    return this._validWords;
+  }
+
+  public createRawGuess(word: string): RawGuess {
+    if (word.length !== 5) {
+      throw new Error('Guess must be exactly 5 letters long.');
+    }
+
+    const isValid = this.isWordValid(word);
+    if (!isValid) {
+      throw new Error('Guess must be in the words list.');
+    }
+
+    return word.split('') as RawGuess;
+  }
+
+  public evaluateRawGuess(guess: RawGuess): Guess {
     if (this._solution === null) {
       throw new Error('Wordle not loaded!');
     }
