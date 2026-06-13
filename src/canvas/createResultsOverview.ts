@@ -58,7 +58,7 @@ export const createResultsOverview = async (botResults: BotResult[]) => {
 
   const resultBoxWidth = 128;
   const resultBoxHeight =
-    THEME.PADDING * 6.5 + // Top text size
+    THEME.PADDING * 7.25 + // Top text size
     Wordle.AttemptCount * (THEME.WORDLE_BOX + THEME.WORDLE_BOX_MARGIN); // wordle height
 
   const canvasWidth =
@@ -108,16 +108,16 @@ export const createResultsOverview = async (botResults: BotResult[]) => {
       resultBoxWidth,
       THEME.PADDING * 2,
     );
-    yOffset += THEME.PADDING * 2;
+    yOffset += THEME.PADDING * 2.75;
 
     responsiveTextInBox(
       `by ${result.meta.author}`,
       resultBoxWidth / 2,
       yOffset,
       resultBoxWidth,
-      THEME.PADDING * 1.5,
+      THEME.PADDING * 1.25,
     );
-    yOffset += THEME.PADDING * 1.5;
+    yOffset += THEME.PADDING * 1.25;
 
     // gap
     yOffset += THEME.PADDING;

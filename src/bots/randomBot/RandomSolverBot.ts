@@ -5,8 +5,8 @@ export class RandomSolverBot extends ASolverBot {
 
   protected _about(): BotMeta {
     return {
-      name: 'Random Bot',
-      author: 'Radek Titěra',
+      name: 'Rand-bot',
+      author: 'Radek',
       description:
         'Picks random words from the valid word list and hopes for the best :).',
     };
