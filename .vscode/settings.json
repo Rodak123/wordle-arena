@@ -1,0 +1,23 @@
+{
+    "js/ts.preferences.importModuleSpecifier": "relative",
+    "js/ts.autoClosingTags.enabled": true,
+    "js/ts.format.semicolons": "insert",
+    "js/ts.preferences.quoteStyle": "single",
+    "prettier.singleQuote": true,
+    "prettier.semi": true,
+    "prettier.tabWidth": 2,
+    "prettier.trailingComma": "all",
+    "prettier.jsxSingleQuote": true,
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+}

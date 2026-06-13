@@ -33,7 +33,7 @@ export abstract class ASolverBot {
 
   // Solver
 
-  public solve(): BotResult {
+  public async solve(): Promise<BotResult> {
     const guesses: Guess[] = [];
     let error: null | Error = null;
     let isSolved: boolean = false;
@@ -41,7 +41,7 @@ export abstract class ASolverBot {
     const startTime = performance.now();
 
     try {
-      this._init();
+      await this._init();
     } catch (err) {
       error = err as Error;
     }
@@ -49,7 +49,7 @@ export abstract class ASolverBot {
     if (error === null) {
       for (let i = 0; i < Wordle.AttemptCount; i++) {
         try {
-          const word = this._pickWord(i, guesses);
+          const word = await this._pickWord(i, guesses);
           const rawGuess = this._wordle.createRawGuess(word);
           const guess = this._wordle.evaluateRawGuess(rawGuess);
           guesses.push(guess);
@@ -102,7 +102,7 @@ export abstract class ASolverBot {
   /**
    * Initializes the custom bot
    */
-  protected abstract _init(): void;
+  protected abstract _init(): Promise<void>;
 
   /**
    * The bot choses a word
@@ -110,5 +110,5 @@ export abstract class ASolverBot {
   protected abstract _pickWord(
     attemptIndex: number,
     previousGuesses: Guess[],
-  ): string;
+  ): Promise<string>;
 }

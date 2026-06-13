@@ -12,12 +12,12 @@ export class RandomSolverBot extends ASolverBot {
     };
   }
 
-  protected _init(): void {
+  protected async _init(): Promise<void> {
     // loads the valid word list
     this._wordsLeft = this._getValidWords();
   }
 
-  protected _pickWord(): string {
+  protected async _pickWord(): Promise<string> {
     // picks and removes a random word from it
     const index = Math.floor(Math.random() * this._wordsLeft.length);
     this._wordsLeft.splice(index, 1);

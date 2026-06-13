@@ -1,4 +1,4 @@
-import { ASolverBot, type BotMeta } from '../allowedContext.ts';
+import { ASolverBot, type Guess, type BotMeta } from '../allowedContext.ts';
 
 /**
  * This is a template for making your own solver bot. Copy this folder and change its name.
@@ -27,11 +27,16 @@ export class CustomSolverBot extends ASolverBot {
     };
   }
 
-  protected _init(): void {
+  protected async _init(): Promise<void> {
     // init your solver bot here
   }
 
-  protected _pickWord(): string {
+  protected async _pickWord(
+    guessIndex: number,
+    previousGuesses: Guess[],
+  ): Promise<string> {
+    console.log('Current guess index: ', guessIndex);
+    console.log('Previous guesses: ', previousGuesses);
     // write your custom bot logic here
     const word: string = 'hello';
     return word;
