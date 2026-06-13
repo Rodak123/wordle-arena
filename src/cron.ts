@@ -1,6 +1,7 @@
 import { main } from './main.ts';
 import cron from 'node-cron';
 
-cron.schedule('10 * * * * *', () => {
+// At 8 AM every day
+cron.schedule('* * 8 * * *', () => {
   main();
 });

@@ -5,5 +5,8 @@ import { RandomSolverBot } from './randomBot/RandomSolverBot.ts';
 
 export const createAllBots = (wordle: Wordle): ASolverBot[] => {
   // add your bot here:
-  return [new RandomSolverBot(wordle)];
+  return [
+    new RandomSolverBot(wordle),
+    // new YourBot(wordle),
+  ];
 };

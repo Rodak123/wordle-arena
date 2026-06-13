@@ -10,17 +10,24 @@ import { Discord } from './discord/Discord.ts';
 import wordleList from './data/wordle-list.json' with { type: 'json' };
 import { createResultsOverview } from './canvas/createResultsOverview.ts';
 
-export const main = async () => {
-  // load discord
+const tryLoadDiscord = () => {
   const webhooksPath = path.join(process.cwd(), 'webhooks.json');
   if (!existsSync(webhooksPath)) {
-    throw new Error(`Missing webhooks at: '${webhooksPath}'`);
+    console.warn(
+      `Missing webhooks at: '${webhooksPath}', discord will not receive messages.`,
+    );
+    return null;
   }
   const webhooks = z
     .array(z.string())
     .parse(JSON.parse(readFileSync(webhooksPath, 'utf8')));
 
-  const discord = new Discord('Wordle Arena', webhooks);
+  return new Discord('Wordle Arena', webhooks);
+};
+
+export const main = async () => {
+  // load discord
+  const discord = tryLoadDiscord();
 
   // load wordle
   const validWords = wordleList;
@@ -51,53 +58,55 @@ export const main = async () => {
     return result;
   });
 
-  // report to discord
-  botResults.sort((a, b) => {
-    // sort by guess count
-    const guessOrder = a.guesses.length - b.guesses.length;
-    return guessOrder;
-  });
+  if (discord !== null) {
+    // report to discord
+    botResults.sort((a, b) => {
+      // sort by guess count
+      const guessOrder = a.guesses.length - b.guesses.length;
+      return guessOrder;
+    });
 
-  const botResultStatusGroups = Object.groupBy(
-    botResults,
-    (result) => result.status,
-  );
+    const botResultStatusGroups = Object.groupBy(
+      botResults,
+      (result) => result.status,
+    );
 
-  const solvedGuessCountGroups = Object.groupBy(
-    botResultStatusGroups.solved ?? [],
-    (result) => result.guesses.length,
-  );
+    const solvedGuessCountGroups = Object.groupBy(
+      botResultStatusGroups.solved ?? [],
+      (result) => result.guesses.length,
+    );
 
-  const stringifyResults = (results: BotResult[]) =>
-    results
-      .map((result) => `**${result.meta.name}** by ${result.meta.author}`)
-      .join(', ');
+    const stringifyResults = (results: BotResult[]) =>
+      results
+        .map((result) => `**${result.meta.name}** by ${result.meta.author}`)
+        .join(', ');
 
-  let content = `Today's Wordle Arena report:${Discord.NewLine}`;
+    let content = `Today's Wordle Arena report:${Discord.NewLine}`;
 
-  let isFirst = true;
-  for (let i = 1; i <= Wordle.AttemptCount; i++) {
-    const results = solvedGuessCountGroups[i];
-    if (results === undefined) continue;
-    if (isFirst) {
-      content += ':crown:';
-      isFirst = false;
+    let isFirst = true;
+    for (let i = 1; i <= Wordle.AttemptCount; i++) {
+      const results = solvedGuessCountGroups[i];
+      if (results === undefined) continue;
+      if (isFirst) {
+        content += ':crown:';
+        isFirst = false;
+      }
+      content += `${i}/${Wordle.AttemptCount}: ${stringifyResults(results)}${Discord.NewLine}`;
     }
-    content += `${i}/${Wordle.AttemptCount}: ${stringifyResults(results)}${Discord.NewLine}`;
+
+    if (botResultStatusGroups.failed !== undefined) {
+      content += `X/${Wordle.AttemptCount}: ${stringifyResults(botResultStatusGroups.failed)}${Discord.NewLine}`;
+    }
+
+    if (botResultStatusGroups.crashed !== undefined) {
+      content += `Crashed :wilted_rose:: ${stringifyResults(botResultStatusGroups.crashed)}${Discord.NewLine}`;
+    }
+
+    // generate overview image
+    const pngData = await createResultsOverview(botResults);
+
+    discord.sendMessage(content, pngData, 'overview.png');
   }
-
-  if (botResultStatusGroups.failed !== undefined) {
-    content += `X/${Wordle.AttemptCount}: ${stringifyResults(botResultStatusGroups.failed)}${Discord.NewLine}`;
-  }
-
-  if (botResultStatusGroups.crashed !== undefined) {
-    content += `Crashed :wilted_rose:: ${stringifyResults(botResultStatusGroups.crashed)}${Discord.NewLine}`;
-  }
-
-  // generate overview image
-  const pngData = await createResultsOverview(botResults);
-
-  discord.sendMessage(content, pngData, 'overview.png');
 };
 
 // Source - https://stackoverflow.com/a/6090287
