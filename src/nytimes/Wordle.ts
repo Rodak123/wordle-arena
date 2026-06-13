@@ -12,6 +12,7 @@ export class Wordle {
   private static getEndpoint = (date: Date) =>
     `https://www.nytimes.com/svc/wordle/v2/${format(date, 'yyyy-MM-dd')}.json`;
 
+  public static readonly WordLength = 5;
   public static readonly AttemptCount = 6;
 
   public static isSolved = (guess: Guess) =>
@@ -68,8 +69,10 @@ export class Wordle {
   }
 
   public createRawGuess(word: string): RawGuess {
-    if (word.length !== 5) {
-      throw new Error('Guess must be exactly 5 letters long.');
+    if (word.length !== Wordle.WordLength) {
+      throw new Error(
+        `Guess must be exactly ${Wordle.WordLength} letters long.`,
+      );
     }
 
     const isValid = this.isWordValid(word);

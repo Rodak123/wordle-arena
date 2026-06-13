@@ -3,7 +3,7 @@ import type { Wordle } from '../nytimes/Wordle.ts';
 
 import { RandomSolverBot } from './randomBot/RandomSolverBot.ts';
 
-export const getAllBots = (wordle: Wordle): ASolverBot[] => {
+export const createAllBots = (wordle: Wordle): ASolverBot[] => {
   // add your bot here:
   return [new RandomSolverBot(wordle)];
 };

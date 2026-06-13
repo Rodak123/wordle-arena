@@ -17,7 +17,8 @@ export class RandomSolverBot extends ASolverBot {
     this._wordsLeft = this._getValidWords();
   }
 
-  protected _pickWord(): string {
+  protected _pickWord(i: number): string {
+    if (i === 3) return 'quell';
     // picks and removes a random word from it
     const index = Math.floor(Math.random() * this._wordsLeft.length);
     this._wordsLeft.splice(index, 1);

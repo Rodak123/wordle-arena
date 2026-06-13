@@ -1,3 +1,4 @@
+// gemini saved this script, I can't find any docs on webhooks
 export class Discord {
   public static readonly NewLine = '\n';
 
@@ -9,18 +10,26 @@ export class Discord {
     this._webhooks = webhooks;
   }
 
-  public async sendMessage(content: string) {
+  public async sendMessage(content: string, file?: Buffer, fileName?: string) {
     for (const webhook of this._webhooks) {
-      const message = {
+      const formData = new FormData();
+
+      const payload = {
         content,
         username: this._username,
       };
+      formData.append('payload_json', JSON.stringify(payload));
+
+      if (file) {
+        const fileUint8Array = file as unknown as Uint8Array<ArrayBuffer>;
+        const fileBlob = new Blob([fileUint8Array]);
+        formData.append('files[0]', fileBlob, fileName || 'upload.png');
+      }
 
       try {
         const response = await fetch(webhook, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(message),
+          body: formData,
         });
 
         if (!response.ok) {

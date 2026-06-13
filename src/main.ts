@@ -1,16 +1,18 @@
 import { existsSync, readFileSync } from 'fs';
+import path from 'path';
 import { z } from 'zod';
 import { Wordle } from './nytimes/Wordle.ts';
 import type { ASolverBot } from './bot/ASolverBot.ts';
-import { getAllBots as createAllBots } from './bots/bots.ts';
+import { createAllBots } from './bots/bots.ts';
 import { BOT_STATUS, type BotResult } from './bot/BotResult.ts';
 import { Discord } from './discord/Discord.ts';
 
 import wordleList from './data/wordle-list.json' with { type: 'json' };
+import { createResultsOverview } from './canvas/createResultsOverview.ts';
 
 const main = async () => {
   // load discord
-  const webhooksPath = `${process.cwd()}/webhooks.json`;
+  const webhooksPath = path.join(process.cwd(), 'webhooks.json');
   if (!existsSync(webhooksPath)) {
     throw new Error(`Missing webhooks at: '${webhooksPath}'`);
   }
@@ -66,8 +68,6 @@ const main = async () => {
     (result) => result.guesses.length,
   );
 
-  console.log(botResultStatusGroups);
-
   const stringifyResults = (results: BotResult[]) =>
     results
       .map((result) => `**${result.meta.name}** by ${result.meta.author}`)
@@ -94,7 +94,10 @@ const main = async () => {
     content += `Crashed :wilted_rose:: ${stringifyResults(botResultStatusGroups.crashed)}${Discord.NewLine}`;
   }
 
-  discord.sendMessage(content);
+  // generate overview image
+  const pngData = await createResultsOverview(botResults);
+
+  discord.sendMessage(content, pngData, 'overview.png');
 };
 
 main();
