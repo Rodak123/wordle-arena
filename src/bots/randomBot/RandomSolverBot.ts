@@ -21,7 +21,6 @@ export class RandomSolverBot extends ASolverBot {
     // picks and removes a random word from it
     const index = Math.floor(Math.random() * this._wordsLeft.length);
     this._wordsLeft.splice(index, 1);
-
     const word = this._wordsLeft[index];
     return word;
   }

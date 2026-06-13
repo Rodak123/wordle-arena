@@ -4,6 +4,7 @@ import {
   LETTER_STATUS,
   type Guess,
   type GuessLetter,
+  type LetterStatus,
   type RawGuess,
 } from './Guess.ts';
 
@@ -18,6 +19,18 @@ export class Wordle {
 
   public static toWord = (guess: Guess) =>
     guess.reduce((word, guessLetter) => word + guessLetter.letter, '');
+
+  public static toEmojis(guess: Guess) {
+    const emojiMap: Record<LetterStatus, string> = {
+      exact: '🟩',
+      occurring: '🟨',
+      missing: '⬛',
+    };
+    return guess.reduce(
+      (word, guessLetter) => word + emojiMap[guessLetter.status],
+      '',
+    );
+  }
 
   private _solution: RawGuess | null = null;
   private _validWords: string[];

@@ -1,11 +1,25 @@
+import { existsSync, readFileSync } from 'fs';
+import { z } from 'zod';
 import { Wordle } from './nytimes/Wordle.ts';
-import wordleList from './data/wordle-list.json' with { type: 'json' };
 import type { ASolverBot } from './bot/ASolverBot.ts';
 import { getAllBots as createAllBots } from './bots/bots.ts';
-import { gu } from 'date-fns/locale';
-import { BOT_STATUS } from './bot/BotResult.ts';
+import { BOT_STATUS, type BotResult } from './bot/BotResult.ts';
+import { Discord } from './discord/Discord.ts';
+
+import wordleList from './data/wordle-list.json' with { type: 'json' };
 
 const main = async () => {
+  // load discord
+  const webhooksPath = `${process.cwd()}/webhooks.json`;
+  if (!existsSync(webhooksPath)) {
+    throw new Error(`Missing webhooks at: '${webhooksPath}'`);
+  }
+  const webhooks = z
+    .array(z.string())
+    .parse(JSON.parse(readFileSync(webhooksPath, 'utf8')));
+
+  const discord = new Discord('Wordle Arena', webhooks);
+
   // load wordle
   const validWords = wordleList;
   const wordle = new Wordle(validWords);
@@ -16,19 +30,71 @@ const main = async () => {
   // setup bots
   const bots: ASolverBot[] = createAllBots(wordle);
 
-  // let bots solve
-  bots.forEach((bot) => {
+  // let bots solve and sort the results
+  console.log(`Bot results:\n`);
+
+  const botResults = bots.map((bot, index) => {
     const result = bot.solve();
     const words = result.guesses.map(Wordle.toWord);
 
-    console.log();
+    console.log(`-- #${index} --`);
     console.log(`Bot '${result.meta.name}' by ${result.meta.author}`);
     console.log(`has ${result.status} in ${result.solvingTimeMs}ms:`);
     console.log('Guesses:', words);
     if (result.status === BOT_STATUS.CRASHED) {
       console.log(`Error: ${result.error}`);
     }
+    console.log();
+
+    return result;
   });
+
+  // report to discord
+  botResults.sort((a, b) => {
+    // sort by guess count
+    const guessOrder = a.guesses.length - b.guesses.length;
+    return guessOrder;
+  });
+
+  const botResultStatusGroups = Object.groupBy(
+    botResults,
+    (result) => result.status,
+  );
+
+  const solvedGuessCountGroups = Object.groupBy(
+    botResultStatusGroups.solved ?? [],
+    (result) => result.guesses.length,
+  );
+
+  console.log(botResultStatusGroups);
+
+  const stringifyResults = (results: BotResult[]) =>
+    results
+      .map((result) => `**${result.meta.name}** by ${result.meta.author}`)
+      .join(', ');
+
+  let content = `Today's Wordle Arena report:${Discord.NewLine}`;
+
+  let isFirst = true;
+  for (let i = 1; i <= Wordle.AttemptCount; i++) {
+    const results = solvedGuessCountGroups[i];
+    if (results === undefined) continue;
+    if (isFirst) {
+      content += ':crown:';
+      isFirst = false;
+    }
+    content += `${i}/${Wordle.AttemptCount}: ${stringifyResults(results)}${Discord.NewLine}`;
+  }
+
+  if (botResultStatusGroups.failed !== undefined) {
+    content += `X/${Wordle.AttemptCount}: ${stringifyResults(botResultStatusGroups.failed)}${Discord.NewLine}`;
+  }
+
+  if (botResultStatusGroups.crashed !== undefined) {
+    content += `Crashed :wilted_rose:: ${stringifyResults(botResultStatusGroups.crashed)}${Discord.NewLine}`;
+  }
+
+  discord.sendMessage(content);
 };
 
 main();

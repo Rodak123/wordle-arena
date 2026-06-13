@@ -1,1 +1,1 @@
-# wordle-bots
+# wordle-arena
