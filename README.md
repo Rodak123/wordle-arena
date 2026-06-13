@@ -10,20 +10,23 @@ Wordle simulator which provides a simple way to implement your own Wordle bot.
 
 - Node ^24
 
-## Run
+## Setup
 
-Ensure that you have `./webhooks.json` file like:
+Add your `./webhooks.json` file like:
 ```json
 [
   "https://discord.com/api/webhooks/..."
 ]
 ```
 This is to send the results to discord.
+If missing, app works just fine :).
 
 Install node packages.
 ```bash
 npm install
 ```
+
+## Run
 
 Start a single arena battle of today.
 
