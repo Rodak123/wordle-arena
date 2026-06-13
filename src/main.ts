@@ -1,17 +1,17 @@
-import { existsSync, readFileSync } from 'fs';
-import path from 'path';
-import { z } from 'zod';
-import { Wordle } from './nytimes/Wordle.ts';
-import type { ASolverBot } from './bot/ASolverBot.ts';
-import { createAllBots } from './bots/bots.ts';
-import { BOT_STATUS, type BotResult } from './bot/BotResult.ts';
-import { Discord } from './discord/Discord.ts';
+import { existsSync, readFileSync } from "fs";
+import path from "path";
+import { z } from "zod";
+import { Wordle } from "./nytimes/Wordle.ts";
+import type { ASolverBot } from "./bot/ASolverBot.ts";
+import { createAllBots } from "./bots/bots.ts";
+import { BOT_STATUS, type BotResult } from "./bot/BotResult.ts";
+import { Discord } from "./discord/Discord.ts";
 
-import wordleList from './data/wordle-list.json' with { type: 'json' };
-import { createResultsOverview } from './canvas/createResultsOverview.ts';
+import wordleList from "./data/wordle-list.json" with { type: "json" };
+import { createResultsOverview } from "./canvas/createResultsOverview.ts";
 
 const tryLoadDiscord = () => {
-  const webhooksPath = path.join(process.cwd(), 'webhooks.json');
+  const webhooksPath = path.join(process.cwd(), "webhooks.json");
   if (!existsSync(webhooksPath)) {
     console.warn(
       `Missing webhooks at: '${webhooksPath}', discord will not receive messages.`,
@@ -20,9 +20,9 @@ const tryLoadDiscord = () => {
   }
   const webhooks = z
     .array(z.string())
-    .parse(JSON.parse(readFileSync(webhooksPath, 'utf8')));
+    .parse(JSON.parse(readFileSync(webhooksPath, "utf8")));
 
-  return new Discord('Wordle Arena', webhooks);
+  return new Discord("Wordle Arena", webhooks);
 };
 
 export const main = async () => {
@@ -42,21 +42,23 @@ export const main = async () => {
   // let bots solve and sort the results
   console.log(`Bot results of ${today.toLocaleDateString()}:\n`);
 
-  const botResults = bots.map((bot, index) => {
-    const result = bot.solve();
-    const words = result.guesses.map(Wordle.toWord);
+  const botResults = await Promise.all(
+    bots.map(async (bot, index) => {
+      const result = await bot.solve();
+      const words = result.guesses.map(Wordle.toWord);
 
-    console.log(`-- #${index} --`);
-    console.log(`Bot '${result.meta.name}' by ${result.meta.author}`);
-    console.log(`has ${result.status} in ${result.solvingTimeMs}ms:`);
-    console.log('Guesses:', words);
-    if (result.status === BOT_STATUS.CRASHED) {
-      console.log(`Error: ${result.error}`);
-    }
-    console.log();
+      console.log(`-- #${index} --`);
+      console.log(`Bot '${result.meta.name}' by ${result.meta.author}`);
+      console.log(`has ${result.status} in ${result.solvingTimeMs}ms:`);
+      console.log("Guesses:", words);
+      if (result.status === BOT_STATUS.CRASHED) {
+        console.log(`Error: ${result.error}`);
+      }
+      console.log();
 
-    return result;
-  });
+      return result;
+    }),
+  );
 
   if (discord !== null) {
     // report to discord
@@ -79,7 +81,7 @@ export const main = async () => {
     const stringifyResults = (results: BotResult[]) =>
       results
         .map((result) => `**${result.meta.name}** by ${result.meta.author}`)
-        .join(', ');
+        .join(", ");
 
     let content = `Today's Wordle Arena report:${Discord.NewLine}`;
 
@@ -88,7 +90,7 @@ export const main = async () => {
       const results = solvedGuessCountGroups[i];
       if (results === undefined) continue;
       if (isFirst) {
-        content += ':crown:';
+        content += ":crown:";
         isFirst = false;
       }
       content += `${i}/${Wordle.AttemptCount}: ${stringifyResults(results)}${Discord.NewLine}`;
@@ -105,7 +107,7 @@ export const main = async () => {
     // generate overview image
     const pngData = await createResultsOverview(botResults);
 
-    discord.sendMessage(content, pngData, 'overview.png');
+    discord.sendMessage(content, pngData, "overview.png");
   }
 };
 
