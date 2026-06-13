@@ -6,6 +6,10 @@ Wordle simulator which provides a simple way to implement your own Wordle bot.
 
 [Create your own solver bot](./docs/CREATE_BOT.md).
 
+## Prerequisites
+
+- Node ^24
+
 ## Run
 
 Ensure that you have `./webhooks.json` file like:
@@ -16,6 +20,7 @@ Ensure that you have `./webhooks.json` file like:
 ```
 This is to send the results to discord.
 
+Install node packages.
 ```bash
 npm install
 ```
