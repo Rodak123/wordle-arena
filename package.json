@@ -1,0 +1,19 @@
+{
+    "name": "wordle-bots",
+    "main": "src/main.ts",
+    "type": "module",
+    "scripts": {
+        "lint": "eslint .",
+        "start": "node src/main.ts"
+    },
+    "devDependencies": {
+        "@types/node": "^24.12.4",
+        "eslint": "^9.39.1",
+        "typescript": "^6.0.3",
+        "typescript-eslint": "^8.61.0"
+    },
+    "dependencies": {
+        "date-fns": "^4.4.0",
+        "zod": "^4.4.3"
+    }
+}
