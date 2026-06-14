@@ -99,9 +99,9 @@ export const main = async () => {
   );
 
   const statusOrderMap: Record<BotStatus, number> = {
-    solved: 3,
+    solved: 1,
     failed: 2,
-    crashed: 1,
+    crashed: 3,
   };
 
   botResults.sort((a, b) => {
