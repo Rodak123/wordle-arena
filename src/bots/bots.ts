@@ -4,6 +4,7 @@ import type { Wordle } from '../nytimes/Wordle.ts';
 import { RandomSolverBot } from './randomBot/RandomSolverBot.ts';
 import { CheatingBot } from './cheatingBot/CheatingBot.ts';
 import { HorsleBot } from './horsleBot/HorsleBot.ts';
+import { PatternBot } from './patternBot/PatternBot.ts';
 
 export const createAllBots = (wordle: Wordle): ASolverBot[] => {
   // add your bot here:
@@ -11,6 +12,7 @@ export const createAllBots = (wordle: Wordle): ASolverBot[] => {
     new RandomSolverBot(wordle),
     new CheatingBot(wordle),
     new HorsleBot(wordle),
+    new PatternBot(wordle),
     // new YourBot(wordle),
   ];
 };
