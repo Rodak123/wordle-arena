@@ -2,7 +2,7 @@
 
 ![Discord Preview](./docs/discord_preview.png)
 
-Wordle simulator which provides a simple way to implement your own Wordle bot.
+Make your fancy schmancy wordle guessing bot and battle it out in this Wordle (not associated in any way) Areana. >:)  
 
 [Create your own solver bot](./docs/CREATE_BOT.md).
 
