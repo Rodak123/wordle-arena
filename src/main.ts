@@ -85,7 +85,7 @@ export const main = async () => {
       const result = await bot.solve();
       const words = result.guesses.map(Wordle.toWord);
 
-      console.log(`-- #${index} --`);
+      console.log(`-- ${index} --`);
       console.log(`Bot '${result.meta.name}' by ${result.meta.author}`);
       console.log(`has ${result.status} in ${result.solvingTimeMs}ms:`);
       console.log('Guesses:', words);
