@@ -34,9 +34,9 @@ export class Wordle {
   }
 
   private _solution: RawGuess | null = null;
-  private _validWords: string[];
+  private _validWords: Set<string>;
 
-  constructor(validWords: string[]) {
+  constructor(validWords: Set<string>) {
     this._validWords = validWords;
   }
 
@@ -61,10 +61,10 @@ export class Wordle {
   }
 
   public isWordValid(word: string): boolean {
-    return this._validWords.includes(word);
+    return this._validWords.has(word);
   }
 
-  public get validWords(): string[] {
+  public get validWords(): Set<string> {
     return this._validWords;
   }
 

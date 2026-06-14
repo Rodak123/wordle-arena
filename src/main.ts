@@ -69,7 +69,7 @@ export const main = async () => {
   const discord = tryLoadDiscord();
 
   // load wordle
-  const validWords = wordleList;
+  const validWords = new Set(wordleList);
   const wordle = new Wordle(validWords);
   const today = new Date();
 

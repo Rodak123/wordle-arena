@@ -26,7 +26,7 @@ export abstract class ASolverBot {
   /**
    * Returns the entire Wordle word list
    */
-  protected _getValidWords(): string[] {
+  protected _getValidWords(): Set<string> {
     this._usedWordList = true;
     return this._wordle.validWords;
   }

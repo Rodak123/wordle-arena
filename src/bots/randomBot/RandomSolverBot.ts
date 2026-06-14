@@ -14,7 +14,7 @@ export class RandomSolverBot extends ASolverBot {
 
   protected async _init(): Promise<void> {
     // loads the valid word list
-    this._wordsLeft = this._getValidWords();
+    this._wordsLeft = [...this._getValidWords().values()];
   }
 
   protected async _pickWord(): Promise<string> {
