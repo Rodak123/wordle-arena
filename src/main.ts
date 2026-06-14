@@ -7,7 +7,7 @@ import { createAllBots } from './bots/bots.ts';
 import { BOT_STATUS, type BotStatus, type BotResult } from './bot/BotResult.ts';
 import { Discord } from './discord/Discord.ts';
 
-import wordleList from './data/wordle-list.json' with { type: 'json' };
+import wordleList from '../data/wordle-list.json' with { type: 'json' };
 import { createResultsOverview } from './canvas/createResultsOverview.ts';
 import { stringifyBotResults } from './utils/stringifyBotResults.ts';
 

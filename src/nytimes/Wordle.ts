@@ -40,6 +40,23 @@ export class Wordle {
     this._validWords = validWords;
   }
 
+  public loadExact(solution: string): void {
+    if (solution.length !== Wordle.WordLength) {
+      this._solution = null;
+      throw new Error(
+        `Solution must have exactly ${Wordle.WordLength} letters.`,
+      );
+    }
+
+    this._solution = [
+      solution[0],
+      solution[1],
+      solution[2],
+      solution[3],
+      solution[4],
+    ];
+  }
+
   public async load(date: Date): Promise<void> {
     const endpoint = Wordle.getEndpoint(date);
     try {
@@ -62,10 +79,6 @@ export class Wordle {
 
   public isWordValid(word: string): boolean {
     return this._validWords.has(word);
-  }
-
-  public get validWords(): Set<string> {
-    return new Set(this._validWords);
   }
 
   public createRawGuess(word: string): RawGuess {
@@ -136,5 +149,13 @@ export class Wordle {
           status: LETTER_STATUS.OCCURRING,
         };
       }) as Guess;
+  }
+
+  public get validWords(): Set<string> {
+    return new Set(this._validWords);
+  }
+
+  public get solution(): RawGuess | null {
+    return this._solution;
   }
 }
