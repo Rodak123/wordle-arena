@@ -9,7 +9,7 @@ import {
 } from '../nytimes/Guess.ts';
 
 GlobalFonts.registerFromPath(
-  path.join(process.cwd(), 'fonts', 'OpenSans-Regular.ttf'),
+  path.join(process.cwd(), 'src', 'data', 'fonts', 'OpenSans-Regular.ttf'),
   'Open Sans',
 );
 

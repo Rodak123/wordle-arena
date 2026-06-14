@@ -1,0 +1,23 @@
+name: Build and test PRs
+
+on:
+  pull_request:
+    branches: ['main']
+    types: ['opened', 'synchronize']
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false

@@ -1,6 +1,6 @@
 import { Wordle } from '../../src/nytimes/Wordle.ts';
 
-import wordleList from '../../data/wordle-list.json' with { type: 'json' };
+import wordleList from '../../src/data/wordle-list.json' with { type: 'json' };
 
 export const createWordleWithSolution = (word: string): Wordle => {
   const validWords = new Set(wordleList);

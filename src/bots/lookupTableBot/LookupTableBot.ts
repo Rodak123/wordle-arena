@@ -8502,7 +8502,7 @@ export class LookupTableBot extends ASolverBot {
     }
 
     const previousGuessEvaluation = this.buildPattern(previousGuesses.at(-1)!);
-    this.lookupTable = this.lookupTable.g![previousGuessEvaluation];
+    this.lookupTable = this.lookupTable.g![previousGuessEvaluation]!;
     return this.lookupTable.w;
   }
 
