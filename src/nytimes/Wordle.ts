@@ -65,19 +65,19 @@ export class Wordle {
   }
 
   public get validWords(): Set<string> {
-    return this._validWords;
+    return new Set(this._validWords);
   }
 
   public createRawGuess(word: string): RawGuess {
     if (word.length !== Wordle.WordLength) {
       throw new Error(
-        `Guess must be exactly ${Wordle.WordLength} letters long.`,
+        `Guess must be exactly '${Wordle.WordLength}' letters long.`,
       );
     }
 
     const isValid = this.isWordValid(word);
     if (!isValid) {
-      throw new Error('Guess must be in the words list.');
+      throw new Error(`Guess must be in the words list. Used: '${isValid}'`);
     }
 
     return word.split('') as RawGuess;

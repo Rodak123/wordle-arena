@@ -4,12 +4,11 @@ import { z } from 'zod';
 import { Wordle } from './nytimes/Wordle.ts';
 import type { ASolverBot } from './bot/ASolverBot.ts';
 import { createAllBots } from './bots/bots.ts';
-import { BOT_STATUS, type BotResult } from './bot/BotResult.ts';
+import { BOT_STATUS, type BotStatus, type BotResult } from './bot/BotResult.ts';
 import { Discord } from './discord/Discord.ts';
 
 import wordleList from './data/wordle-list.json' with { type: 'json' };
 import { createResultsOverview } from './canvas/createResultsOverview.ts';
-import { stringifySolvingTime } from './utils/stringifySolvingTime.ts';
 import { stringifyBotResults } from './utils/stringifyBotResults.ts';
 
 const tryLoadDiscord = () => {
@@ -99,7 +98,17 @@ export const main = async () => {
     }),
   );
 
+  const statusOrderMap: Record<BotStatus, number> = {
+    solved: 3,
+    failed: 2,
+    crashed: 1,
+  };
+
   botResults.sort((a, b) => {
+    // sort by status
+    const statusOrder = statusOrderMap[a.status] - statusOrderMap[b.status];
+    if (statusOrder !== 0) return statusOrder;
+
     // sort by guess count
     const guessOrder = a.guesses.length - b.guesses.length;
     if (guessOrder !== 0) return guessOrder;
