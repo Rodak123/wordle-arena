@@ -1,5 +1,5 @@
-import type { ASolverBot } from '../bot/ASolverBot.ts';
-import type { Wordle } from '../nytimes/Wordle.ts';
+import type { ASolverBot } from '../core/bot/ASolverBot.ts';
+import { type Wordle } from '../core/nytimes/Wordle.ts';
 
 import { RandomSolverBot } from './randomBot/RandomSolverBot.ts';
 import { CheatingBot } from './cheatingBot/CheatingBot.ts';

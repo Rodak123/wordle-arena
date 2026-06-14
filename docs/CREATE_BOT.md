@@ -40,7 +40,14 @@ export const createAllBots = (wordle: Wordle): ASolverBot[] => {
 
 Don't forget to test run it:
 ```bash
-npm run start
+npm run daily
+```
+
+Or use other [run commands](../README.md#run).
+
+Or a random word:
+```bash
+npm run random
 ```
 
 Also make sure that you have correct linting and types:

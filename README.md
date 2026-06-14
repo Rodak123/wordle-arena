@@ -22,6 +22,7 @@ Make your fancy schmancy wordle guessing bot and battle it out in this Wordle (n
   - [Prerequisites](#prerequisites)
   - [Setup](#setup)
   - [Run](#run)
+  - [Test](#test)
   - [Credits](#credits)
 
 ## Prerequisites
@@ -47,15 +48,40 @@ npm install
 ## Run
 
 Start a single arena battle of today.
-
 ```bash
-npm run start
+npm run daily
+```
+
+Start a single arena battle with a random word.
+```bash
+npm run random
+```
+
+Start a single arena battle with a random word.
+```bash
+npm run word <WORD>
 ```
 
 Start battles every day at 8 AM.
-
 ```bash
 npm run cron
+```
+
+## Test
+
+Check linting and type errors.
+```bash
+npm run lint
+```
+
+Run `tests/` once.
+```bash
+npm run test
+```
+
+Run `tests/` and wait for changes.
+```bash
+npm run test-watch
 ```
 
 ## Credits

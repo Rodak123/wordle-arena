@@ -57,24 +57,24 @@ export class Wordle {
     ];
   }
 
-  public async load(date: Date): Promise<void> {
+  public async loadByDate(date: Date): Promise<void> {
     const endpoint = Wordle.getEndpoint(date);
     try {
       const response = await fetch(endpoint);
       const json = await response.json();
 
       const wordle = DailyWordleSchema.parse(json);
-      this._solution = [
-        wordle.solution[0],
-        wordle.solution[1],
-        wordle.solution[2],
-        wordle.solution[3],
-        wordle.solution[4],
-      ];
+      this.loadExact(wordle.solution);
     } catch (err) {
       this._solution = null;
       throw new Error(`Failed to load Wordle: ${err}`);
     }
+  }
+
+  public loadRandom(): void {
+    const allWords = [...this._validWords];
+    const index = Math.floor(Math.random() * allWords.length);
+    this.loadExact(allWords[index]);
   }
 
   public isWordValid(word: string): boolean {
@@ -157,5 +157,10 @@ export class Wordle {
 
   public get solution(): RawGuess | null {
     return this._solution;
+  }
+
+  public get solutionWord(): string | null {
+    if (this.solution === null) return null;
+    return this.solution.join('');
   }
 }

@@ -3,7 +3,9 @@
   "main": "src/main.ts",
   "type": "module",
   "scripts": {
-    "start": "node src/main.ts",
+    "daily": "node src/daily.ts",
+    "random": "node src/random.ts",
+    "word": "node src/word.ts",
     "cron": "node src/cron.ts",
     "lint": "eslint . && tsc --noEmit",
     "test-watch": "vitest",

@@ -1,4 +1,4 @@
-import { Wordle } from '../../src/nytimes/Wordle.ts';
+import { Wordle } from '../../src/core/nytimes/Wordle.ts';
 
 import wordleList from '../../src/data/wordle-list.json' with { type: 'json' };
 

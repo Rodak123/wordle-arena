@@ -39,7 +39,7 @@ const LETTER_STATUS_STYLE_MAP: Record<LetterStatus, string> = {
   missing: THEME.GREY,
 };
 
-export const createResultsOverview = async (botResults: BotResult[]) => {
+export const createResultsOverviewImage = async (botResults: BotResult[]) => {
   // canvas my beloved :P
 
   const resultGridCols = 3;

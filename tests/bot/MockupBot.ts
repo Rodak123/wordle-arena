@@ -1,5 +1,5 @@
-import { ASolverBot } from '../../src/bot/ASolverBot';
-import { type BotMeta } from '../../src/bot/BotMeta';
+import { ASolverBot } from '../../src/core/bot/ASolverBot';
+import { type BotMeta } from '../../src/core/bot/BotMeta';
 
 export class MockupBot extends ASolverBot {
   public static readonly WrongWord = 'latch';
@@ -11,7 +11,6 @@ export class MockupBot extends ASolverBot {
     return {
       name: 'Mockup Bot',
       author: 'Tester',
-      description: 'Just tests the app out.',
     };
   }
 

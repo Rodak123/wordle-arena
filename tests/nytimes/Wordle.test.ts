@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 import { describe } from 'node:test';
 import { createWordleWithSolution } from './createWordleWithSolution.ts';
-import { LETTER_STATUS, type RawGuess } from '../../src/nytimes/Guess.ts';
+import { LETTER_STATUS, type RawGuess } from '../../src/core/nytimes/Guess.ts';
 
 describe('Wordle', () => {
   test('is created and loaded', () => {

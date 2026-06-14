@@ -2,7 +2,7 @@ import { expect, test } from 'vitest';
 import { describe } from 'node:test';
 import { createWordleWithSolution } from '../nytimes/createWordleWithSolution.ts';
 import { MockupBot } from './MockupBot.ts';
-import { BOT_STATUS } from '../../src/bot/BotResult.ts';
+import { BOT_STATUS } from '../../src/core/bot/BotResult.ts';
 
 describe('Mockup Bot', () => {
   test('is created and solves after 3 guesses', async () => {
