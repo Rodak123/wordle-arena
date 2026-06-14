@@ -2,6 +2,7 @@ import { BOT_STATUS, type BotResult } from './BotResult.ts';
 import { type Guess } from '../nytimes/Guess.ts';
 import { Wordle } from '../nytimes/Wordle.ts';
 import type { BotMeta } from './BotMeta.ts';
+import { Stopwatch } from '../utils/Stopwatch.ts';
 
 export abstract class ASolverBot {
   private _wordle: Wordle;
@@ -38,10 +39,12 @@ export abstract class ASolverBot {
     let error: null | Error = null;
     let isSolved: boolean = false;
 
-    const startTime = performance.now();
+    const stopwatch = new Stopwatch();
 
     try {
+      stopwatch.start();
       await this._init();
+      stopwatch.stop();
     } catch (err) {
       error = err as Error;
     }
@@ -49,7 +52,10 @@ export abstract class ASolverBot {
     if (error === null) {
       for (let i = 0; i < Wordle.AttemptCount; i++) {
         try {
+          stopwatch.start();
           const word = await this._pickWord(i, guesses);
+          stopwatch.stop();
+
           const rawGuess = this._wordle.createRawGuess(word);
           const guess = this._wordle.evaluateRawGuess(rawGuess);
           guesses.push(guess);
@@ -65,12 +71,9 @@ export abstract class ASolverBot {
       }
     }
 
-    const endTime = performance.now();
-    const solvingTimeMs = endTime - startTime;
-
     const baseResult = {
       guesses,
-      solvingTimeMs,
+      solvingTimeMs: stopwatch.timeMs,
       meta: this._about(),
     };
 
