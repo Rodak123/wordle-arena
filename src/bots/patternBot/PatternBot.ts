@@ -7,7 +7,7 @@ import {
 } from '../allowedContext.ts';
 
 export class PatternBot extends ASolverBot {
-  private _wordsLeft: string[] = [];
+  private _wordsLeft: Set<string> = new Set();
 
   protected _about(): BotMeta {
     return {
@@ -21,6 +21,14 @@ export class PatternBot extends ASolverBot {
     this._wordsLeft = this._getValidWords();
   }
 
+  private _pickRandomFromWordsLeft(): string {
+    const words = [...this._wordsLeft.values()];
+    const index = Math.floor(Math.random() * words.length);
+    const word = words[index];
+    this._wordsLeft.delete(word);
+    return word;
+  }
+
   protected async _pickWord(
     guessIndex: number,
     previousGuesses: Guess[],
@@ -28,7 +36,9 @@ export class PatternBot extends ASolverBot {
     if (guessIndex === 0) {
       // a good one seed strategy word
       // source: https://www.sfi.ie/research-news/news/wordle-data-analytics/
-      return 'tales';
+      const firstWord = 'tales';
+      this._wordsLeft.delete(firstWord);
+      return firstWord;
     }
 
     const missingLetters = [
@@ -45,7 +55,6 @@ export class PatternBot extends ASolverBot {
 
     console.log(missingLetters);
 
-    let bestMatch = this._wordsLeft[0];
-    return bestMatch;
+    return this._pickRandomFromWordsLeft();
   }
 }
