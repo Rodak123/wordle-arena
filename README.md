@@ -39,3 +39,8 @@ Start battles every day at 8 AM.
 ```bash
 npm run cron
 ```
+
+## Credits
+
+- Wordle List - [gist.github.com/dracos/valid-wordle-words.txt](https://gist.github.com/dracos/dd0668f281e685bad51479e5acaadb93)
+- Daily Solution - [www.nytimes.com](https://www.nytimes.com/svc/wordle/v2/2026-06-13.json)

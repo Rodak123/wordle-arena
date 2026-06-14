@@ -77,7 +77,7 @@ export class Wordle {
 
     const isValid = this.isWordValid(word);
     if (!isValid) {
-      throw new Error(`Guess must be in the words list. Used: '${isValid}'`);
+      throw new Error(`Guess must be in the words list. Used: '${word}'`);
     }
 
     return word.split('') as RawGuess;
