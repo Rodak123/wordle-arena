@@ -1,5 +1,6 @@
-import { createWordle } from './actions/createWordle.ts';
-import { runBotsAndSortResults } from './actions/runBotsAndSortResults.ts';
+import { Wordle } from './core/nytimes/Wordle.ts';
+import { createAllBots } from './bots/bots.ts';
+import { WordleBotRunner } from './core/WordleBotRunner.ts';
 
 type BotResultsAggregation = {
   solvedChallenges: number;
@@ -13,7 +14,7 @@ type BotResultsAggregation = {
  * Benchmarks all bots on top of the whole wordlist
  */
 export const benchmark = async () => {
-  const wordle = createWordle();
+  const wordle = Wordle.createWordleFromLocal();
   const results: Record<string, BotResultsAggregation> = {};
 
   for (const word of wordle.validWords) {
@@ -21,9 +22,11 @@ export const benchmark = async () => {
 
     wordle.loadExact(word);
 
-    const botResults = await runBotsAndSortResults(wordle);
+    const wordleBotRunner = new WordleBotRunner(createAllBots(wordle));
 
-    botResults.forEach((result) => {
+    await wordleBotRunner.runBots();
+    wordleBotRunner.sortResults();
+    wordleBotRunner.botResults.forEach((result) => {
       const name = result.meta.name;
 
       results[name] ??= {
@@ -35,7 +38,7 @@ export const benchmark = async () => {
       };
 
       const totalGuesses =
-        results[name].solvedChallenges + results[name].failedChallenges + 1;
+          results[name].solvedChallenges + results[name].failedChallenges + 1;
 
       switch (result.status) {
         case 'solved':
@@ -53,11 +56,11 @@ export const benchmark = async () => {
       }
 
       results[name].averageSolvingTimeMs +=
-        result.solvingTimeMs / totalGuesses -
-        results[name].averageSolvingTimeMs / Math.max(totalGuesses - 1, 1);
+          result.solvingTimeMs / totalGuesses -
+          results[name].averageSolvingTimeMs / Math.max(totalGuesses - 1, 1);
       results[name].averageGuesses +=
-        result.guesses.length / totalGuesses -
-        results[name].averageGuesses / Math.max(totalGuesses - 1, 1);
+          result.guesses.length / totalGuesses -
+          results[name].averageGuesses / Math.max(totalGuesses - 1, 1);
     });
   }
 
