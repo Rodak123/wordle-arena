@@ -10,10 +10,9 @@ type BotResultsAggregation = {
 };
 
 /**
- * Uses random word from the valid word list
+ * Benchmarks all bots on top of the whole wordlist
  */
 export const benchmark = async () => {
-  // load wordle
   const wordle = createWordle();
   const results: Record<string, BotResultsAggregation> = {};
 
