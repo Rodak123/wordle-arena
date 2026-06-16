@@ -1,15 +1,15 @@
-import type { LetterStatus } from '../allowedContext.ts';
-import { ASolverBot, type Guess, type BotMeta } from '../allowedContext.ts';
-import { lookupTable } from './lookupTable.ts';
-import type { Clue, Evaluation, LookupTableSubtree } from './types.ts';
+import type { LetterStatus } from "../allowedContext.ts";
+import { ASolverBot, type Guess, type BotMeta } from "../allowedContext.ts";
+import { lookupTable } from "./lookupTable.ts";
+import type { Clue, Evaluation, LookupTableSubtree } from "./types.ts";
 
 export class LookupTableBot extends ASolverBot {
   private lookupTable: LookupTableSubtree = lookupTable;
 
   protected _about(): BotMeta {
     return {
-      name: 'O(1) lookup table bot',
-      author: 'Jirka Vrba',
+      name: "O(1) lookup table bot",
+      author: "Jirka Vrba",
     };
   }
 
@@ -30,11 +30,11 @@ export class LookupTableBot extends ASolverBot {
 
   private buildPattern(guess: Guess): Evaluation {
     const mapping: Record<LetterStatus, Clue> = {
-      exact: 'c',
-      occurring: 'p',
-      missing: 'a',
+      exact: "c",
+      occurring: "p",
+      missing: "a",
     };
 
-    return guess.map((letter) => mapping[letter.status]).join('') as Evaluation;
+    return guess.map((letter) => mapping[letter.status]).join("") as Evaluation;
   }
 }

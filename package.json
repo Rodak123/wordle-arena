@@ -6,7 +6,12 @@
     "daily": "node src/daily.ts",
     "random": "node src/random.ts",
     "word": "node src/word.ts",
+<<<<<<< HEAD
     "cron": "node src/dailyCron.ts",
+=======
+    "cron": "node src/cron.ts",
+    "benchmark": "node src/benchmark.ts",
+>>>>>>> a43d0b0 (Add benchmarking + optimized table lookup bot)
     "lint": "eslint . && tsc --noEmit",
     "test-watch": "vitest",
     "test": "vitest run"
