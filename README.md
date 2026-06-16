@@ -1,6 +1,10 @@
 # Wordle Bot Arena
 
-![Discord Preview](./docs/discord_preview.png)
+Today's wordle:
+
+<a href="https://wordle.titera.dev/">
+  <img src="https://wordle.titera.dev/overview.png" alt="Wordle Daily Overview" />
+</a>
 
 Make your fancy schmancy wordle guessing bot and battle it out in this Wordle (not associated in any way) Arena. >:)  
 
@@ -23,6 +27,7 @@ Make your fancy schmancy wordle guessing bot and battle it out in this Wordle (n
   - [Setup](#setup)
   - [Run](#run)
   - [Test](#test)
+  - [Discord](#discord)
   - [Credits](#credits)
 
 ## Prerequisites
@@ -83,6 +88,12 @@ Run `tests/` and wait for changes.
 ```bash
 npm run test-watch
 ```
+
+## Discord
+
+Here is how it looks in discord:
+
+![Discord Preview](./docs/discord_preview.png)
 
 ## Credits
 
