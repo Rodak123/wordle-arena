@@ -6,6 +6,8 @@ Today's wordle:
   <img src="https://wordle.titera.dev/overview.png" alt="Wordle Daily Overview" />
 </a>
 
+Bot benchmarks:
+
 <a href="https://wordle.titera.dev/benchmark.png">
   <img src="https://wordle.titera.dev/benchmark.png" alt="Wordle Benchmark" />
 </a>
