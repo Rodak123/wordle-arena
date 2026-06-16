@@ -1,18 +1,18 @@
-import { tryLoadDiscord } from './actions/tryLoadDiscord.ts';
-import { createWordle } from './actions/createWordle.ts';
 import { runBotsAndSortResults } from './actions/runBotsAndSortResults.ts';
-import { reportToDiscord } from './actions/reportToDiscord.ts';
+import { DiscordBot } from './core/discord/DiscordBot.ts';
+import { Wordle } from './core/nytimes/Wordle.ts';
+import { OverviewImage } from './core/overviewImage/OverviewImage.ts';
+import { ResultsReport } from './core/utils/ResultsReport.ts';
 
 /**
  * Uses todays Wordle solution for the bots
  */
 export const daily = async () => {
-  // load discord
-  const discord = tryLoadDiscord();
+  // initialize
+  const discordBot = DiscordBot.createDiscordBotFromLocal('WordleArena');
+  const wordle = Wordle.createWordleFromLocal();
 
   // load wordle
-  const wordle = createWordle();
-
   const today = new Date();
   await wordle.loadByDate(today);
 
@@ -21,14 +21,23 @@ export const daily = async () => {
 
   const botResults = await runBotsAndSortResults(wordle);
 
-  // report to discord
-  if (discord !== null) {
-    await reportToDiscord(
-      botResults,
-      discord,
-      `Wordle Arena of ${today.toLocaleDateString()} report:`,
-    );
-  }
+  // generate results
+  const overviewImage = new OverviewImage();
+  const resultsReport = new ResultsReport(
+    `Wordle Arena of ${today.toLocaleDateString()} report:`,
+  );
+
+  await overviewImage.generateOverview(botResults);
+  resultsReport.generateReportMessage(botResults);
+
+  // save and send
+  discordBot.sendMessage({
+    type: 'attached-files',
+    content: resultsReport.reportMessage,
+    attachedFiles: [overviewImage.overviewImage],
+  });
+
+  overviewImage.saveOverviewImage();
 };
 
 if (import.meta.main) {

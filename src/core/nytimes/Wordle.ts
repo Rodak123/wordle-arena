@@ -8,9 +8,30 @@ import {
   type RawGuess,
 } from './Guess.ts';
 
+import { existsSync, readFileSync } from 'fs';
+import path from 'path';
+import { z } from 'zod';
+
 export class Wordle {
   private static getEndpoint = (date: Date) =>
     `https://www.nytimes.com/svc/wordle/v2/${format(date, 'yyyy-MM-dd')}.json`;
+
+  public static createWordleFromLocal(
+    relativeWordListPath: string = 'src/data/wordle-list.json',
+  ) {
+    const wordListPath = path.join(process.cwd(), relativeWordListPath);
+    if (!existsSync(wordListPath)) {
+      throw new Error(`Missing word list at: '${wordListPath}'`);
+    }
+
+    const wordList = z
+      .array(z.string())
+      .parse(JSON.parse(readFileSync(wordListPath, 'utf8')));
+
+    const validWords = new Set(wordList);
+
+    return new Wordle(validWords);
+  }
 
   public static readonly WordLength = 5;
   public static readonly AttemptCount = 6;

@@ -1,17 +1,18 @@
-import { reportToDiscord } from './actions/reportToDiscord.ts';
-import { tryLoadDiscord } from './actions/tryLoadDiscord.ts';
-import { createWordle } from './actions/createWordle.ts';
 import { runBotsAndSortResults } from './actions/runBotsAndSortResults.ts';
+import { ResultsReport } from './core/utils/ResultsReport.ts';
+import { OverviewImage } from './core/overviewImage/OverviewImage.ts';
+import { DiscordBot } from './core/discord/DiscordBot.ts';
+import { Wordle } from './core/nytimes/Wordle.ts';
 
 /**
  * Uses a specific word as a solution
  */
 export const word = async (solutionWord: string) => {
-  // load discord
-  const discord = tryLoadDiscord();
+  // initialize
+  const discordBot = DiscordBot.createDiscordBotFromLocal('WordleArena');
+  const wordle = Wordle.createWordleFromLocal();
 
   // load wordle
-  const wordle = createWordle();
   wordle.loadExact(solutionWord);
 
   // let bots solve
@@ -19,14 +20,23 @@ export const word = async (solutionWord: string) => {
 
   const botResults = await runBotsAndSortResults(wordle);
 
-  // report to discord
-  if (discord !== null) {
-    await reportToDiscord(
-      botResults,
-      discord,
-      `Wordle Arena for the word '${wordle.solutionWord}' report:`,
-    );
-  }
+  // generate results
+  const overviewImage = new OverviewImage();
+  const resultsReport = new ResultsReport(
+    `Wordle Arena for the word '${wordle.solutionWord}' report:`,
+  );
+
+  await overviewImage.generateOverview(botResults);
+  resultsReport.generateReportMessage(botResults);
+
+  // save and send
+  discordBot.sendMessage({
+    type: 'attached-files',
+    content: resultsReport.reportMessage,
+    attachedFiles: [overviewImage.overviewImage],
+  });
+
+  overviewImage.saveOverviewImage();
 };
 
 if (import.meta.main) {
