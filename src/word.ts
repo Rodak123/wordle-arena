@@ -1,8 +1,9 @@
-import { runBotsAndSortResults } from './actions/runBotsAndSortResults.ts';
 import { ResultsReport } from './core/utils/ResultsReport.ts';
 import { OverviewImage } from './core/overviewImage/OverviewImage.ts';
 import { DiscordBot } from './core/discord/DiscordBot.ts';
 import { Wordle } from './core/nytimes/Wordle.ts';
+import { createAllBots } from './bots/bots.ts';
+import { WordleBotRunner } from './core/WordleBotRunner.ts';
 
 /**
  * Uses a specific word as a solution
@@ -16,9 +17,12 @@ export const word = async (solutionWord: string) => {
   wordle.loadExact(solutionWord);
 
   // let bots solve
-  console.log(`Bot results for '${wordle.solutionWord}':\n`);
+  const wordleBotRunner = new WordleBotRunner(createAllBots(wordle));
 
-  const botResults = await runBotsAndSortResults(wordle);
+  wordleBotRunner.runBots();
+  wordleBotRunner.sortResults();
+
+  console.log(`Bot results for '${wordle.solutionWord}':\n`);
 
   // generate results
   const overviewImage = new OverviewImage();
@@ -26,8 +30,8 @@ export const word = async (solutionWord: string) => {
     `Wordle Arena for the word '${wordle.solutionWord}' report:`,
   );
 
-  await overviewImage.generateOverview(botResults);
-  resultsReport.generateReportMessage(botResults);
+  await overviewImage.generateOverview(wordleBotRunner.botResults);
+  resultsReport.generateReportMessage(wordleBotRunner.botResults);
 
   // save and send
   discordBot.sendMessage({

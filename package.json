@@ -1,12 +1,12 @@
 {
   "name": "wordle-bots",
-  "main": "src/main.ts",
+  "main": "src/daily.ts",
   "type": "module",
   "scripts": {
     "daily": "node src/daily.ts",
     "random": "node src/random.ts",
     "word": "node src/word.ts",
-    "cron": "node src/cron.ts",
+    "cron": "node src/dailyCron.ts",
     "lint": "eslint . && tsc --noEmit",
     "test-watch": "vitest",
     "test": "vitest run"

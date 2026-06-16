@@ -1,8 +1,9 @@
-import { runBotsAndSortResults } from './actions/runBotsAndSortResults.ts';
+import { createAllBots } from './bots/bots.ts';
 import { DiscordBot } from './core/discord/DiscordBot.ts';
 import { Wordle } from './core/nytimes/Wordle.ts';
 import { OverviewImage } from './core/overviewImage/OverviewImage.ts';
 import { ResultsReport } from './core/utils/ResultsReport.ts';
+import { WordleBotRunner } from './core/WordleBotRunner.ts';
 
 /**
  * Uses todays Wordle solution for the bots
@@ -17,9 +18,12 @@ export const daily = async () => {
   await wordle.loadByDate(today);
 
   // let bots solve
-  console.log(`Bot results of '${today.toLocaleDateString()}':\n`);
+  const wordleBotRunner = new WordleBotRunner(createAllBots(wordle));
 
-  const botResults = await runBotsAndSortResults(wordle);
+  wordleBotRunner.runBots();
+  wordleBotRunner.sortResults();
+
+  console.log(`Bot results of '${today.toLocaleDateString()}':\n`);
 
   // generate results
   const overviewImage = new OverviewImage();
@@ -27,8 +31,8 @@ export const daily = async () => {
     `Wordle Arena of ${today.toLocaleDateString()} report:`,
   );
 
-  await overviewImage.generateOverview(botResults);
-  resultsReport.generateReportMessage(botResults);
+  await overviewImage.generateOverview(wordleBotRunner.botResults);
+  resultsReport.generateReportMessage(wordleBotRunner.botResults);
 
   // save and send
   discordBot.sendMessage({
