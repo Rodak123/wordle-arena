@@ -8,7 +8,7 @@ import { WordleBotRunner } from './core/WordleBotRunner.ts';
 /**
  * Uses todays Wordle solution for the bots
  */
-export const daily = async () => {
+export const daily = async (sendToDiscord: boolean = true) => {
   // initialize
   const discordBot = DiscordBot.createDiscordBotFromLocal('WordleArena');
   const wordle = Wordle.createWordleFromLocal();
@@ -35,11 +35,13 @@ export const daily = async () => {
   resultsReport.generateReportMessage(wordleBotRunner.botResults);
 
   // save and send
-  discordBot.sendMessage({
-    type: 'attached-files',
-    content: resultsReport.reportMessage,
-    attachedFiles: [overviewImage.overviewImage],
-  });
+  if (sendToDiscord) {
+    discordBot.sendMessage({
+      type: 'attached-files',
+      content: resultsReport.reportMessage,
+      attachedFiles: [overviewImage.overviewImage],
+    });
+  }
 
   overviewImage.saveOverviewImage();
 };
