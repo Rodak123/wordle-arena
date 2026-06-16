@@ -2,7 +2,7 @@
 
 Today's wordle:
 
-<img src="https://wordle.titera.dev/overview.png" alt="Wordle Daily Overview" data-canonical-src="https://wordle.titera.dev/overview.png" />
+![Wordle Daily Overview](https://wordle.titera.dev/overview.png)
 
 Make your fancy schmancy wordle guessing bot and battle it out in this Wordle (not associated in any way) Arena. >:)  
 
