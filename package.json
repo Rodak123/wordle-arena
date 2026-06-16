@@ -6,7 +6,7 @@
     "daily": "node src/daily.ts",
     "random": "node src/random.ts",
     "word": "node src/word.ts",
-    "cron": "node src/cron.ts",
+    "cron": "node src/dailyCron.ts",
     "benchmark": "node src/benchmark.ts",
     "lint": "eslint . && tsc --noEmit",
     "test-watch": "vitest",
