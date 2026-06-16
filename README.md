@@ -62,7 +62,7 @@ Start a single arena battle with a random word.
 npm run word <WORD>
 ```
 
-Start battles every day at 8 AM.
+Start battles every day as 6 AM.
 ```bash
 npm run cron
 ```
