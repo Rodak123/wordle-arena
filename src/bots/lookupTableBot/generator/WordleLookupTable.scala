@@ -174,7 +174,7 @@ def computeLookupTableTree(
 @main
 def main(): Unit = {
   val wordlist = Source
-    .fromResource("words-2025.txt")
+    .fromResource("wordlist.txt")
     .getLines()
     .map(_.trim)
     .filter(_.nonEmpty)
