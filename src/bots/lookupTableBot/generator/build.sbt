@@ -1,0 +1,11 @@
+scalaVersion := "3.8.4"
+
+lazy val root = rootProject
+  .settings(
+    name := "lookup-table-builder",
+    libraryDependencies ++= Seq(
+      "io.circe" %% "circe-core" % "0.14.15",
+      "io.circe" %% "circe-generic" % "0.14.15",
+      "io.circe" %% "circe-parser" % "0.14.15"
+    )
+  )
